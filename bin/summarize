@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "json"
+require_relative "../lib/event_summarizer"
+
+file_path = ARGV[0]
+
+if file_path.nil?
+  warn "Usage: bin/summarize <events.json>"
+  exit 1
+end
+
+unless File.file?(file_path)
+  warn "File not found: #{file_path}"
+  exit 1
+end
+
+begin
+  raw_events = JSON.parse(File.read(file_path))
+  summary = EventSummarizer.summarize(raw_events)
+
+  puts JSON.pretty_generate(summary)
+rescue JSON::ParserError => e
+  warn "Invalid JSON: #{e.message}"
+  exit 1
+rescue ArgumentError => e
+  warn "Invalid input: #{e.message}"
+  exit 1
+end
