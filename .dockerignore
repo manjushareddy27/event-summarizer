@@ -1,0 +1,6 @@
+.git
+.bundle
+coverage
+vendor/bundle
+.DS_Store
+*.zip
